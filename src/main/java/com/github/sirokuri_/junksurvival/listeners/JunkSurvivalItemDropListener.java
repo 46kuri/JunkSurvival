@@ -1,12 +1,9 @@
 package com.github.sirokuri_.junksurvival.listeners;
 
-import com.github.sirokuri_.junksurvival.JunkSurvival;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,7 +11,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class JunkSurvivalItemDropListener implements Listener {
 
@@ -44,7 +40,6 @@ public class JunkSurvivalItemDropListener implements Listener {
                     Item entityItem = block.getWorld().dropItem(location, item);
                     entityItem.setTicksLived(4800);
                 }
-                removeExceedItems(block.getWorld());
             }
         } catch (IllegalArgumentException illegalArgumentException){
             illegalArgumentException.fillInStackTrace();
@@ -61,19 +56,9 @@ public class JunkSurvivalItemDropListener implements Listener {
         return item;
     }
 
-    private final List<Material> invalids = Arrays.asList(Material.AIR, Material.FIRE, Material.WATER, Material.LAVA , Material.AIR);
+    private final List<Material> invalids = Arrays.asList(Material.AIR, Material.FIRE, Material.WATER, Material.LAVA);
 
     private boolean isValidItem(Material material) {
         return !invalids.contains(material);
-    }
-
-    private void removeExceedItems(World world) {
-        JunkSurvival.newSharedChain("RemoveExceedItems").syncFirst(world::getEntities).asyncLast(input -> {
-            List<Item> items = input.stream().filter(ent -> ent instanceof Item).
-                    map(ent -> (Item) ent).sorted(Comparator.comparingInt(Entity::getTicksLived).reversed()).collect(Collectors.toList());
-            for (int i = 0, size = items.size(); i < size - 400; i++) {
-                items.get(i).remove();
-            }
-        }).execute();
     }
 }
