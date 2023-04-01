@@ -1,2 +1,2 @@
 # JunkSurvival
-JunkGames用のサバイバルplugin
+plugin for junkGames server in Azisaba Network
