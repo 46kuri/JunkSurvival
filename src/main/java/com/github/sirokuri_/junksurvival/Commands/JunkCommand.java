@@ -1,15 +1,14 @@
 package com.github.sirokuri_.junksurvival.Commands;
 
 import com.github.sirokuri_.junksurvival.JunkSurvival;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.*;
 
 public class JunkCommand implements CommandExecutor {
 
@@ -31,8 +30,7 @@ public class JunkCommand implements CommandExecutor {
                         Player player = (Player) sender;
                         ItemStack borderItem = plugin.addWorldBorderItem();
                         player.getInventory().addItem(borderItem);
-                        Bukkit.getLogger().info("[JunkSurvival] " + player.getName() + " に寄付アイテムを付与しました");
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&',"&a&l寄付アイテムが付与されました"));
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&',"&a&lすげーアイテムが付与されました"));
                     }
                 }
 
@@ -60,6 +58,15 @@ public class JunkCommand implements CommandExecutor {
                         ItemStack killItem = plugin.killItem();
                         player.getInventory().addItem(killItem);
                         player.sendMessage(ChatColor.translateAlternateColorCodes('&',"&c&lやべーアイテムが付与されました"));
+                    }
+                }
+
+                if (args[1].equalsIgnoreCase("5")) {
+                    if (sender.hasPermission("junkSurvivalGive.permission.Admin")) {
+                        Player player = (Player) sender;
+                        ItemStack powerItem = plugin.powerItem();
+                        player.getInventory().addItem(powerItem);
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&',"&a&lすげーアイテムが付与されました"));
                     }
                 }
             }

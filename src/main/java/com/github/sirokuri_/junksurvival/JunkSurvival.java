@@ -5,27 +5,42 @@ import com.github.sirokuri_.junksurvival.listeners.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 public final class JunkSurvival extends JavaPlugin {
 
-    /*
-        ・ワールドリセットを一年単位にする
-        ・砂や砂利を落下しないようにする
-        ・何かを達成した時 (例 指定のアイテム納品やターゲット討伐など)に全プレイヤーが得する効果を付与する(例 HP増加、攻撃力上昇、不死のトーテム付与)
-        ・全プレイヤー合計10回死ぬと全プレイヤーの場所にウィザー沸きを全プレイヤー合計10回死ぬと全プレイヤーの場所にランダムなモブ沸きへ変更
-    */
+    public BukkitRunnable task = null;
+
+    public List<Player> superEasyMode = new ArrayList<Player>();
+
+    public List<Player> easyMode = new ArrayList<Player>();
+    public List<Player> normalMode = new ArrayList<Player>();
+    public List<Player> hardMode = new ArrayList<Player>();
+
 
     @Override
     public void onEnable() {
         Bukkit.getPluginManager().registerEvents(new JunkSurvivalItemDropListener(this), this);
         //Bukkit.getPluginManager().registerEvents(new JunkSurvivalCraftShuffleListener(), this);
-        Bukkit.getPluginManager().registerEvents(new JunkSurvivalMessageListener(), this);
-        Bukkit.getPluginManager().registerEvents(new JunkSurvivalPreventGriefListener(), this);
+        Bukkit.getPluginManager().registerEvents(new JunkSurvivalMessageListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new JunkSurvivalPreventGriefListener(this), this);
         Bukkit.getPluginManager().registerEvents(new JunkSurvivalGiantSpawnListener(), this);
-        Bukkit.getPluginManager().registerEvents(new JunkAddWorldBorder(this),this);
+        Bukkit.getPluginManager().registerEvents(new JunkAddWorldBorder(),this);
+        //Bukkit.getPluginManager().registerEvents(new JunkSurvivalDisableWorld(),this);
+        Bukkit.getPluginManager().registerEvents(new JunkSurvivalTipEvent(this),this);
         getCommand("junkSurvivalGive").setExecutor(new JunkCommand(this));
         Bukkit.getLogger().info(getName() + " enabled.");
     }
@@ -65,5 +80,13 @@ public final class JunkSurvival extends JavaPlugin {
         itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&',"&cみちづれ"));
         bomb.setItemMeta(itemMeta);
         return bomb;
+    }
+
+    public ItemStack powerItem(){
+        ItemStack powerItem = new ItemStack (Material.GOLD_NUGGET);
+        ItemMeta itemMeta = powerItem.getItemMeta();
+        itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&',"&aぱわー!!"));
+        powerItem.setItemMeta(itemMeta);
+        return powerItem;
     }
 }

@@ -3,14 +3,3 @@ version: '${project.version}'
 main: com.github.sirokuri_.junksurvival.JunkSurvival
 api-version: 1.16
 authors: [ 46kuri_ ]
-
-commands:
-  junkSurvivalGive:
-    description: コンフィグリロード
-    permission: junkSurvivalGive.permission.Admin
-
-permissions:
-  junkSurvivalGive.permission.Admin:
-    default: op
-  junkSurvivalGive.permission.Member:
-    default: true
